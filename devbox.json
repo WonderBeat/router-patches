@@ -1,0 +1,40 @@
+{
+	"$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.16.0/.schema/devbox.schema.json",
+	"packages": [
+		"github-to-sops@latest",
+		"ssh-to-age@latest",
+		"sops@latest"
+	],
+	"shell": {
+		"init_hook": [
+			"export SOPS_AGE_KEY_FILE=\"$(pwd)/.key\""
+		],
+		"scripts": {
+			"sops-key": [
+				"read -s SSH_TO_AGE_PASSPHRASE",
+				"export SSH_TO_AGE_PASSPHRASE",
+				"ssh-to-age -private-key -i $1 -o .key"
+			]
+		}
+	},
+	"sops": {
+		"age": [
+			{
+				"recipient": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKg7/kBmHlOYb4UHYGqcY/yYHR02x3dridkBa6pc/flR",
+				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNzaC1lZDI1NTE5IGs5S0N1ZyBiTzdY\neXFoVnpVTkhTZkIxSmJST0U0ZVRoMTh6MlBlM1R4dlhGN0M1VDFNCkE4dVFJT010\nN2VmTGVpN1FKTjJSR3dnOTd2cFVsMTNaT1VRRDJSbStuZDAKLS0tIEFXYUp5Qlo4\nODBLaVJRQ1JyY3NTZVVKbGpBVm5BU0JDN05ueFJtbXpnTkkKonVjQpTumAfl26oo\nDtVipkRvDYVOBMz4ppF0eWd3zhXpQfWt9Z0jWcV/AqkNaj0NjA49604tQReefMQg\nd2W4Zg==\n-----END AGE ENCRYPTED FILE-----\n"
+			},
+			{
+				"recipient": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFOf+OD/2a3/uj/QKcWHILt6gzQUjtnSVwubNPPMcXEW",
+				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNzaC1lZDI1NTE5IGVSQmMzZyBYTVJI\nN24yMTlKcnE5clJsL1Z4eXVsOSsycFN2KzdaZDkvTVB1YjFYYmlFCnBuM29iK2s3\nbjB2MEkvbjNKM2QwUjRXaTdEUExraVFYb3FXTlNvZG5vNWMKLS0tIDJ1T1JkMlQ0\nU1Q2L0R3RndVTUlSSFpRQVEzNzVSVTErQXk4SnRBdEx4NVUK2/RHT2Rri0BDQjFg\nENZnv8CrAXMKt5EJrRJtkQvHU3YdjZfoKXbezgqDmyq8I7nlwLOEC0rBYV/mDLUi\nD1aobA==\n-----END AGE ENCRYPTED FILE-----\n"
+			},
+			{
+				"recipient": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJE7AlB4XNgssbrBxRcrUUdWbRsVdCiblz3XTXu1s9iC",
+				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNzaC1lZDI1NTE5IC9iSnFvQSBMLzF4\nOHFpUWR4YlVhenRPbEVxR000cDFWOTVrR2RMNExFVHN6QXZpcHpzCk9IMUxDNGZp\nTEVmSlQ4V2ltMERxeEdpNllBSzNGclowVWsydHVKc1VENEkKLS0tIDBMZUFNdFYw\nckR5clFpbG80WTcycjJkQlN5RkFIMFhjeVlYNDR1ZGExS28K68dtfIOBqTOoKnc6\nMuBfCaBOL8dhph9S8dugeHamKtQDdsiWydaEAT9kgh3oKZ/ANc+ocSiFRvBTtF84\nqWPUCw==\n-----END AGE ENCRYPTED FILE-----\n"
+			}
+		],
+		"lastmodified": "2025-12-22T20:13:26Z",
+		"mac": "ENC[AES256_GCM,data:hwBl4SCXss1PbayvbFGPMGiy/kMfkW3VfWr4vxVkoru/2GzvdfE4H/lE2ekQyxwSrmHh17xps69vNZcMycauCr1mEnzFMfO01cp0q6F6slJ/pJJ4SsLSefdmRwZuDRDp/k+mQljgzusmLIPHEE3FBblXBIffK6nG+ndiA9NtgJI=,iv:KWGDfvphtAT4VrX3KkRKB1lUvwUpHVRrsHdce/lVNQ8=,tag:0eziqRgDUrrWB/NkVFm/bA==,type:str]",
+		"encrypted_regex": "^(key|pass.*|secret|addr|api_path|user|password|token_id|token_secret|realm|insecure|ssh_user|ssh_key)$",
+		"version": "3.11.0"
+	}
+}
