@@ -19,7 +19,8 @@ reload() {
     MARK="0x2"
     ROUTE_TABLE="252" 
 
-    LOCAL_V4_RANGE="10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+    #LOCAL_V4_RANGE="10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+    LOCAL_V4_RANGE="172.16.0.0/12,192.168.0.0/16"
     LOCAL_V6_RANGE="fc00::/7"
 
     # 1. Clean up only our specific Forwarding bypass
@@ -27,16 +28,25 @@ reload() {
     ip rule del fwmark $MARK 2>/dev/null
     ip -6 rule del fwmark $MARK 2>/dev/null
     iptables -t mangle -D PREROUTING -i $LAN_INTERFACE -p tcp -m multiport --dports 80,443,8080 -j MARK --set-mark $MARK 2>/dev/null
+
     iptables -t mangle -D PREROUTING -i $LAN_INTERFACE -d $LOCAL_V4_RANGE -j RETURN 2>/dev/null
     iptables -t mangle -D PREROUTING -i $LAN_INTERFACE -p tcp --dport 16756 -j ACCEPT 2>/dev/null
     iptables -t mangle -D PREROUTING -i $LAN_INTERFACE -p tcp --dport 22 -j ACCEPT 2>/dev/null
     iptables -t nat -D POSTROUTING -o $TUN_INTERFACE -j SNAT --to-source 172.16.250.1 2>/dev/null
+    iptables -t mangle -D PREROUTING -i $LAN_INTERFACE -d 10.0.0.0/8 -j RETURN 2>/dev/null
     iptables -D FORWARD -i $LAN_INTERFACE -j ACCEPT 2>/dev/null
     iptables -D FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT 2>/dev/null
+    iptables -D FORWARD -i br-lan -o wg0 -j ACCEPT 2>/dev/null
+    iptables -t nat -D POSTROUTING -o wg0 -j MASQUERADE 2>/dev/null
+    iptables -D FORWARD -p icmp -j ACCEPT 2>/dev/null
 
     # 2. Add the specific bypass at the TOP of the Forward chain
     # This prevents the packet from hitting the "zone_lan_dest_REJECT" rule
     iptables -I FORWARD 1 -i $LAN_INTERFACE -o $TUN_INTERFACE -j ACCEPT
+    iptables -I FORWARD 2 -i $LAN_INTERFACE -o wg0 -j ACCEPT
+
+    # Masquerade traffic going to WireGuard so the Peer knows how to reply
+    iptables -t nat -A POSTROUTING -o wg0 -j MASQUERADE
 
     # --- 3. Set up Policy and Routing ---
     echo "Setting up policy and routes..."
@@ -49,6 +59,10 @@ reload() {
     # Bypass proxy for specific ports (e.g., router management)
     iptables -t mangle -A PREROUTING -i $LAN_INTERFACE -p tcp --dport 22 -j ACCEPT
     iptables -t mangle -A PREROUTING -i $LAN_INTERFACE -p tcp --dport 16756 -j ACCEPT
+
+    #wg route
+    ip route add 10.69.101.0/24 dev wg0 scope link
+
 
     # Do not mark traffic destined for the local network
     iptables -t mangle -A PREROUTING -i $LAN_INTERFACE -d $LOCAL_V4_RANGE -j RETURN

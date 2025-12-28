@@ -9,7 +9,7 @@
 			{
 				"tag": "cloudflare-dns",
 				"type": "https",
-				"server": "ENC[AES256_GCM,data:5WztctNQVg==,iv:4miqOSktd5rnFr9J4f3PawyzSQ5gotwq712aJzZfKYw=,tag:kMTcM9ppYFYcD2PyJ2osnw==,type:str]"
+				"server": "ENC[AES256_GCM,data:tq8HME9V9A==,iv:UYceG/MXBsTDQlCfwpba3ONnHfN2CNcKcGbrTGwSN6I=,tag:wXBQl2H0OesoDWAObOo0uQ==,type:str]"
 			},
 			{
 				"tag": "local-dns",
@@ -18,21 +18,48 @@
 			{
 				"tag": "pihole",
 				"type": "tcp",
-				"server": "ENC[AES256_GCM,data:eASAkKsiCdt77Cha,iv:YVRARqsV9YqGaE0iagbueLP1RmuJRZOYg4pfMixzyho=,tag:9w+C+89E1MrqHhV0pwkyCA==,type:str]",
+				"server": "ENC[AES256_GCM,data:iyP19cvmk8SG0oq8,iv:mUOI/tVuXOGJWFy9fc5usPwTMENJjExDJ+ICViraxsE=,tag:3xHbAFSag4WKS31Vf/uNsw==,type:str]",
 				"detour": "vpn-out"
 			}
 		],
 		"rules": [
 			{
 				"rule_set": "antizapret",
-				"server": "ENC[AES256_GCM,data:B0NcDsYW,iv:sr3Tcku9pnh0wV4L3ccXMq7oC/4yN7M0npA6LYDSsnk=,tag:JvLC/l3ZToyC7ufW87Snmg==,type:str]"
+				"server": "ENC[AES256_GCM,data:xnilBtKC,iv:BoA9qmemTPkudbq2pIM49BHk2PNsm+vLVMWDrSApX2Y=,tag:Qql2coFGCFnzLaSD1nNbVQ==,type:str]"
 			},
 			{
 				"rule_set": "ru-bundle",
-				"server": "ENC[AES256_GCM,data:6jYIx3BD,iv:tMy0ZxJJ4giTGU7zCCIBnB5V8PwOwTT3BtKvAXf48l4=,tag:bhzAyecrwNZuIFIh4Xfspg==,type:str]"
+				"server": "ENC[AES256_GCM,data:0+CQYc9Q,iv:MCWM7UKKs5XdnB8EORJgEJPqBNOspJdstgbQcLgt3zQ=,tag:mAq8NQKwSjnSDhQxjM6Tbw==,type:str]"
 			}
 		]
 	},
+	"endpoints": [
+		{
+			"type": "wireguard",
+			"tag": "wg",
+			"system": true,
+			"name": "wg0",
+			"mtu": 1380,
+			"address": [
+				"10.69.101.123/32",
+				"fd42:42:42::123/128"
+			],
+			"private_key": "ENC[AES256_GCM,data:bZoa8AP7bOiUd+0nRvoow3l5uB655XmpnPsFxJG/sk1gxNqTS1J8aqPlrXM=,iv:orWN3bqdGh88cmLuul64n2KTrHbcOuC7Q+oRoRsvHIM=,tag:QWP/DOQs9nNNd0T47j245Q==,type:str]",
+			"peers": [
+				{
+					"address": "10.98.61.43",
+					"port": 6000,
+					"public_key": "pX3gcD4Ci5cS031iQzpkGKUdsrZV4XiW36VJ8ejegiw=",
+					"pre_shared_key": "ENC[AES256_GCM,data:5kV/svPW3vgWr+BfNW9Nusdu+bzJJiJ5wvgKuiHKVdml6/EZvI7gkxeHzdc=,iv:jpJWA093ElQxBhr/MGl4ehk4XKdXkSC5U/h+ze8VOPM=,tag:9YTHYaAQWssQy/iEaLmZ4w==,type:str]",
+					"allowed_ips": [
+						"0.0.0.0/0"
+					],
+					"persistent_keepalive_interval": 120
+				}
+			],
+			"detour": "trojan-out"
+		}
+	],
 	"inbounds": [
 		{
 			"type": "tun",
@@ -50,15 +77,6 @@
 			"endpoint_independent_nat": false,
 			"strict_route": false,
 			"sniff": true
-		},
-		{
-			"type": "tproxy",
-			"tag": "tproxy-in",
-			"listen": "127.0.0.1",
-			"listen_port": 8888,
-			"network": "tcp",
-			"sniff": true,
-			"sniff_override_destination": true
 		}
 	],
 	"outbounds": [
@@ -68,23 +86,37 @@
 		},
 		{
 			"type": "urltest",
+			"tag": "trojan-out",
+			"outbounds": [
+				"trojan-nagi",
+				"trojan-nagi-31443"
+			],
+			"url": "https://www.youtube.com",
+			"interval": "20m",
+			"interrupt_exist_connections": true
+		},
+		{
+			"type": "urltest",
 			"tag": "vpn-out",
 			"outbounds": [
 				"trojan-nagi",
 				"trojan-nagi-31443",
+				"ssh-o1",
 				"shadow",
-				"ssh"
+				"ssh-kesa",
+				"ssh-oracle"
 			],
 			"url": "https://www.youtube.com",
-			"interval": "6m",
-			"interrupt_exist_connections": false
+			"interval": "7m",
+			"interrupt_exist_connections": true
 		},
 		{
 			"type": "trojan",
 			"tag": "trojan-nagi",
-			"server": "ENC[AES256_GCM,data:RfivnTRh3727Kn4+LLdb3bd1q028TcwCd7slqNx2JV5uIZYE6FQKH5yi,iv:G4WgBGSmpfxBRIYgZdtIQy3BX/Dj4zNMLGDZ3Io+fB0=,tag:GrrJPJtqj10FmRZhmvW1QA==,type:str]",
+			"server": "ENC[AES256_GCM,data:ELAUWJAQPhNiUeIute66xrYZTE/ykyWhy6KSdqLcOcnRMDlYIfzWeYl9,iv:Ws+KcrhKPkE1DRZ1yTHSORUVOwiYn+6MX+ENGPkho9s=,tag:MRw1gzhpGXNXnF4KdE/Nig==,type:str]",
 			"server_port": 443,
-			"password": "ENC[AES256_GCM,data:NiTHcrNYext86w==,iv:RgAEVPwFRWCJVMHcy+CXIHV03JJDnW08fBCsLpKx9Tc=,tag:nslHs/N4+UUTkTMcex1bGw==,type:str]",
+			"password": "ENC[AES256_GCM,data:SCczzvXCg9emSg==,iv:ywOtfNUck4ZpPezphldMKQAMOS0axVsgDLSPiBvt9UA=,tag:YwftgdKxsluPYx178wVV7A==,type:str]",
+			"connect_timeout": "5s",
 			"tls": {
 				"enabled": true,
 				"server_name": "yahoo.com",
@@ -100,25 +132,47 @@
 			},
 			"multiplex": {
 				"enabled": false
-			}
+			},
+			"tcp_fast_open": true
 		},
 		{
 			"type": "shadowsocks",
-			"server": "ENC[AES256_GCM,data:TdA7oUPDx4QJ6kclhNqTi7u1FQ==,iv:GMoPKRhHbfV3El+uM6E+/xVJywmhANBfG3hN+jmpAPQ=,tag:BywpJDTjAvgIhOkpWEcouQ==,type:str]",
+			"server": "ENC[AES256_GCM,data:k/AOgvTw56RCaJ/p5SGVkgoXDg==,iv:6UUW1Y7P5n+2DpuIRr/bxkqKAjO0aoysLUIyOXjbMW0=,tag:ufw5OxpSSZ18EgXOfdDXGg==,type:str]",
+			"network": "tcp",
 			"tag": "shadow",
-			"server_port": 31443,
-			"method": "2022-blake3-aes-128-gcm",
-			"password": "ENC[AES256_GCM,data:u6KNj07W8UDt8lXIAm/jaF4fAXFSY1po,iv:GD2d6U6Uk6B9a00JRHc9rJlGp23thgarllGbvGM2Ofw=,tag:utg+9p6q2Qu9qkch9ZO8SQ==,type:str]",
+			"server_port": 31444,
+			"method": "2022-blake3-chacha20-poly1305",
+			"password": "ENC[AES256_GCM,data:8A9XEuFn8K7f4+NneA1oLYSM6HRUzK1EdcfktTXkTfPsa7sqZoGCxvtvqIU=,iv:gdrdj21piCI14dBGyrATUzLGF01ZfdsX+jMewKW1AqM=,tag:do/cnKe0thGqZWOnlBlshw==,type:str]",
 			"multiplex": {
-				"enabled": true
+				"enabled": false
 			}
 		},
 		{
 			"type": "ssh",
-			"tag": "ssh",
-			"server": "ENC[AES256_GCM,data:bkwcD3k8kfMdjTUAWEo=,iv:68qmhGD0heplobXrFVSplmrH8ym1EWUPoAF0vkcd7Xg=,tag:RTMnbTAEf2ND8S8xnDjReA==,type:str]",
+			"tag": "ssh-oracle",
+			"server": "ENC[AES256_GCM,data:n6rxJlgLZuQx+X44zVbO,iv:5Sft0b9MxGXXiNMKEjbwYV2znnbwkXIhEuoGTqg4AWI=,tag:sh1F0NdI/YbyQAIzemK6kg==,type:str]",
 			"server_port": 22,
-			"user": "ENC[AES256_GCM,data:PpYfIbx1IuCS,iv:k+qvZVTJXaMJ1BHOZgjQ/KVQpVa0ZGrenyJ5sEA6rVU=,tag:hgdAL7TaSAWU67WyBwkaJg==,type:str]",
+			"user": "ENC[AES256_GCM,data:GMBeoxmmxmm8,iv:V0zdsddKcmKNM6+z1we4ss4HfOd4ipOK5E4OPTmH3ns=,tag:h3i1sk9RjfeMQhFCKWwUvQ==,type:str]",
+			"private_key_path": "/data/ssh/id_ed25519_proxyuser",
+			"connect_timeout": "5s",
+			"tcp_fast_open": false
+		},
+		{
+			"type": "ssh",
+			"tag": "ssh-kesa",
+			"server": "ENC[AES256_GCM,data:iwmXP5VUimMsPnBAJrgHC0X6BQ==,iv:+ZB3NjDzJEeDeeoCBeqlGHrpzvEeUQ6heMAK37C3QGE=,tag:ITVh+fqFz2D+LrTELYZDrA==,type:str]",
+			"server_port": 22,
+			"user": "ENC[AES256_GCM,data:0+qeLcq9VJ/Z,iv:eqXUJ0oiqly6NBmOMzpXbpQipfKcx3CVb5Tcdg4sY3Y=,tag:JXEX15lzwesW3qASrm41cQ==,type:str]",
+			"private_key_path": "/data/ssh/id_ed25519_proxyuser",
+			"connect_timeout": "5s",
+			"tcp_fast_open": true
+		},
+		{
+			"type": "ssh",
+			"tag": "ssh-o1",
+			"server": "ENC[AES256_GCM,data:kw21kERZsNzDHYCzsMQ=,iv:astyMqud3NY+RXHs0v8nyUQ6UWogBB6qquqoVAG8Spc=,tag:9qnwotcAhiQAA44HnwHVTQ==,type:str]",
+			"server_port": 22,
+			"user": "ENC[AES256_GCM,data:Ipd2S/IjJlcH,iv:Cwp6BWL5j1Z2UgedOOWl8WH4QijESWz69HBYDu0/oGc=,tag:uerzhvEvB72PeccmD7uVnw==,type:str]",
 			"private_key_path": "/data/ssh/id_ed25519_proxyuser",
 			"connect_timeout": "5s",
 			"tcp_fast_open": true
@@ -126,9 +180,9 @@
 		{
 			"type": "trojan",
 			"tag": "trojan-nagi-31443",
-			"server": "ENC[AES256_GCM,data:YjiIu9EPzwJOmquC+TWM7LcCNz3XcYPbq7Kptw1Xd4QeXzQst8Zhb+2P,iv:9tS2KOnNMtyVG15F+XpY17ucASZ8VmImg6wwnYWhiHk=,tag:OqrcGuHmXc2oPmGpzAZRew==,type:str]",
+			"server": "ENC[AES256_GCM,data:XDJRH/tIw08Qh2OVjfGMzsRcXhC+M1B61VtiLAvP8tHYbn9eUpTCR8Xv,iv:qfjAGe9zIFYkZAodjwtci0XGpGCCi0/Oo9X19IPSfck=,tag:fNIYOSc0W2GZ3UU5llXJww==,type:str]",
 			"server_port": 31443,
-			"password": "ENC[AES256_GCM,data:gq2NazSyKL2rgA==,iv:KdkKr51fqcT9GYwba+NfwadU3Ij8RznNUsUUlX4UteI=,tag:Li4EHjqXGgStXwUcGEp9xw==,type:str]",
+			"password": "ENC[AES256_GCM,data:ZPcMcqgW+N1saA==,iv:a35eanEtQJJBPSyYmBsTNpdJFZnd8p35c9ArizzA9pA=,tag:VomiejTx/EcRXGeGAf1eJw==,type:str]",
 			"tls": {
 				"enabled": true,
 				"server_name": "yahoo.com",
@@ -151,6 +205,12 @@
 	"route": {
 		"final": "direct-out",
 		"rules": [
+			{
+				"ip_cidr": [
+					"10.69.101.0/24"
+				],
+				"outbound": "wg"
+			},
 			{
 				"rule_set": "discord-voice-ip-list",
 				"outbound": "vpn-out"
@@ -241,27 +301,27 @@
 			"external_controller": "192.168.33.1:16756",
 			"external_ui": "dashboard",
 			"access_control_allow_private_network": true,
-			"secret": "ENC[AES256_GCM,data:6tDT9bNPj6SwW1ulqEVfQusl,iv:X2BdeiNwSJ2zB9oAXqvYsezt97PX/QwwoOHOMYE3h8A=,tag:0ZCkAp5ovoS503zaRzBqKg==,type:str]"
+			"secret": "ENC[AES256_GCM,data:krPwrBWS3hlnc/zR/sXsOStb,iv:Af8zq/MWBPQfBTreAiDSXsmrKhT8BPmHefQ3UgEKaJM=,tag:XxsQciyDZw3eUA46hubMqA==,type:str]"
 		}
 	},
 	"sops": {
 		"age": [
 			{
 				"recipient": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKg7/kBmHlOYb4UHYGqcY/yYHR02x3dridkBa6pc/flR",
-				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNzaC1lZDI1NTE5IGs5S0N1ZyBTalIx\nZmVmZlYwNUV1dWpNM2NjNU1LWDlRai8vdWxqblkwM2VFMDZjT0hBCkFXclMvaDBE\ndk5oTElXTTFQMjA5Zk9ablhqbUYyTVllWFRsNHVMY20vYVUKLS0tIHZ5SStNeTkw\nVTlOejJiMi9DaXphTEhDdXhHTEg0aWpTKzB4ZlpscXNXVGMKqrcFVqIXDXXcMAEN\nI4YuzaCQSIIx9ATDYotuMZ5x+haWfPLzJYP1ygd9Yz00rkV/1s/VwlNK73BNK5M8\nZj+0dg==\n-----END AGE ENCRYPTED FILE-----\n"
+				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNzaC1lZDI1NTE5IGs5S0N1ZyBBd1hO\nMklEc2xDNEhxUHh4cWl5YnZleDQydGM0YVZNU3F1bWVHOGtjaXpzCjl0SHhQcXVa\ndGRRRzlMRWtwUXVwdzZNdjNoeVJHaS9NY2d3WWJrQTl3cm8KLS0tIFFQWHVOa1hZ\nUlJXbWk2dCtseW9XRW1SbGJDMTgwTUpEVEFlSW1WNmJhMVkKwFytQk9INW290++y\nms17U614VygdUVBtpZyYCbTMS1d4WhMECX7oPG6++kSbr1TfWEEO8146bR3JOzt2\nnSB5mQ==\n-----END AGE ENCRYPTED FILE-----\n"
 			},
 			{
 				"recipient": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFOf+OD/2a3/uj/QKcWHILt6gzQUjtnSVwubNPPMcXEW",
-				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNzaC1lZDI1NTE5IGVSQmMzZyBzWVpB\nREJSbHRXUzlETGJQRWlZWHZrSDdwS2Vzc2NJWFhkYVMyRllqQ1hNCkd1YjF4WU1m\ndDZRYldTSWo4bkdrYzJRY002M2dJQzRXSDZqZDBFa2V2bmcKLS0tIHEvM01zdlVa\nT1JnNFFwTXdPUmQwTHpCN0hReFBub0hTTnUvQjBsRGxRTXMKa0FbXnpI+UemgbCt\nzBf6bf6fUuyRTnf8AR4FFw3fWPXH1ylGX0eT1eKAu1Gr4+D2YPCk3scSXyE4Gtfh\nIKD/+Q==\n-----END AGE ENCRYPTED FILE-----\n"
+				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNzaC1lZDI1NTE5IGVSQmMzZyByeDcv\nUFV0Qk12ck0xMmUzTXRpMFZxTlBhemFFNTBKR1RFUHdJRWlkZ0gwCjFUUzhCTFNK\nbGRoNVBFSWpGajRML1dzMlB1cTRyVUJKVWRJNmNUVTdpdXMKLS0tIHU1YUtXZnMw\ndFRzWjE0VHRNWEJ1S29laXhHaVJJaitZekt5dGIrMC9sMUUK/s/MD/EAYmUFbhng\n8G+IPspgP7+gSePOGgj+a8K7bDPwrngRUeTl5D2MUVd07lnJkeOZAV3ZTSlz7vQ9\nKyvTvA==\n-----END AGE ENCRYPTED FILE-----\n"
 			},
 			{
 				"recipient": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJE7AlB4XNgssbrBxRcrUUdWbRsVdCiblz3XTXu1s9iC",
-				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNzaC1lZDI1NTE5IC9iSnFvQSA4ZTRG\nelNJb01aV1FhVUkxV3d3UElrQTUxTmlBVGxKck45K0lkM2JJVnlVCnFzOHNvWWVw\nTzg4ajY0TFZSMUt2TmFxM0NsZGZxaXRMeW9paUJUbHlydWsKLS0tIDdHQkFjRmY2\nUEI1QkZvTG0zWmZvcTVvVC9zZ1MwYmlvRXI4c2c5cHpyUmMKloelnTULIiNWrzlr\nQm9WUGOPAmRw6EOO2JwhQX1BD+pTL48ot3j2JUymOzg8tSQmdA8H32Mk+srtS78e\n8f7m4Q==\n-----END AGE ENCRYPTED FILE-----\n"
+				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNzaC1lZDI1NTE5IC9iSnFvQSB1dTdG\nUDcxQXRaTWVpdE0zRkVWeFdqTGoxL0dVd3JTVTlYdVkwbEE3NndZCkVtdmZGZEhK\nall6dDRabVIzb2U5dGNzVzZjdC9Wa3VIRGJObHRSZVY1TGcKLS0tIGNibDE4Q082\nUWVXVjhsUUx0cDluS0tUd3pnUkhqaEI5cktnbHRFMzJNTEUKgB0rV55qCw0DOd5h\n5NAr0Y8Frg2iRupwum94UqbM4taZXNHD6DE+kKtO0uQsIp7glSUrJC/y1uHAcRL+\n166oAQ==\n-----END AGE ENCRYPTED FILE-----\n"
 			}
 		],
-		"lastmodified": "2025-12-23T14:26:26Z",
-		"mac": "ENC[AES256_GCM,data:anR84nHjWPY/4JdYHDbfDmjJN02OD24VlqIHmVIe1a6rmnRbfv4/JcqFPbWH334u0pgzGk3gu+27ih9HTaMfkRd+2AfvIcYMiUu42Bv6UFiHNIy//0S31ysEgIcRDczmvaLIe7R9xCT+mPoZodbWXIhMqfac0BF0RPODZiyZK4Q=,iv:J0EfLq1/By/lmtHOteuYIMt8eTDgxEHIP+PLSi/8GLw=,tag:bmeUYD0af7ThEdhDvZWHhQ==,type:str]",
-		"encrypted_regex": "^(server|key|pass.*|secret|addr|api_path|user|password|token_id|token_secret|realm|insecure|ssh_user|ssh_key)$",
+		"lastmodified": "2025-12-28T11:16:06Z",
+		"mac": "ENC[AES256_GCM,data:EVd8ooF2elBlIbe9yZEhcmfPbRzBFxmcTEfN+TQTYCepYsDrzTcPgEnBlG1xT0VImwXM34lhqpb4mOM4PbPfiAjjnU1G1X1hhNrTJMNIIqXQUcFWEw1ONq56J5ARseeeH9GEM3TM8imZCKdSs93dQRKd/i/ZxaI8oPUaPLeH8QU=,iv:C0/E2Y1OobnmHaOin1xVS7v5EaXyvPX3MUImXZxA9Zs=,tag:aIDtDpR6C0EK74RVP4bwTQ==,type:str]",
+		"encrypted_regex": "^(private_key|pre_shared_key|server|key|pass.*|secret|addr|api_path|user|password|token_id|token_secret|realm|insecure|ssh_user|ssh_key)$",
 		"version": "3.11.0"
 	}
 }
