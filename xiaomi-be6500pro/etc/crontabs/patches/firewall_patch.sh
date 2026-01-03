@@ -63,6 +63,7 @@ reload() {
     #wg route
     ip route add 10.69.101.0/24 dev wg0 scope link
     ip route add 10.88.101.0/24 dev wg0 scope link
+    ip route add 192.168.11.0/24 dev wg0 scope link
 
 
     # Do not mark traffic destined for the local network
