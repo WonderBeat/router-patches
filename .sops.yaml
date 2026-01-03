@@ -10,5 +10,5 @@ creation_rules:
     encrypted_regex: ^(private_key|pre_shared_key|server|key|pass.*|secret|addr|api_path|user|password|token_id|token_secret|realm|insecure|ssh_user|ssh_key)$
     key_groups: *default_keys
 
-  # - path_regex: .*ed25519.*
-  #   key_groups: *default_keys
+  - path_regex: .*ed25519.*
+    key_groups: *default_keys

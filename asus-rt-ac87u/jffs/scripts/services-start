@@ -1,0 +1,7 @@
+#!/bin/sh
+
+set -x
+LOG=/var/singbox.log
+
+logger "$0:" "Running singbox - see output at $LOG"
+/jffs/scripts/singbox.sh >>$LOG 2>&1 &
