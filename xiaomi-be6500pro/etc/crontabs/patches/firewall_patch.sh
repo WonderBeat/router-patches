@@ -3,6 +3,16 @@ set -x
 
 [ -e "/tmp/firewall_patch.log" ] && exit 0
 
+for i in $(seq 1 30); do
+  if ip link show tun0 >/dev/null 2>&1 && ip link show wg0 >/dev/null 2>&1; then
+    echo "Interfaces tun0 and wg0 are available"
+    break
+  fi
+  sleep 4
+done
+
+[ -e "/tmp/firewall_patch.log" ] && exit 0
+
 cat >/data/userdisk/appdata/firewall.sh <<'EOF'
 #!/bin/sh
 

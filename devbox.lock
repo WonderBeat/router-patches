@@ -1,6 +1,70 @@
 {
   "lockfile_version": "1",
   "packages": {
+    "detect-secrets@latest": {
+      "last_modified": "2025-12-16T16:49:59Z",
+      "resolved": "github:NixOS/nixpkgs/e8d16d2186d6ed9f047eb30948e97e7e01886d10#detect-secrets",
+      "source": "devbox-search",
+      "version": "1.5.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/b3dbikq3nkhags08lbn70cns3f0igqb4-python3.13-detect-secrets-1.5.0",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/j715h8v97w97v5jlrv8ckx85599d6mbv-python3.13-detect-secrets-1.5.0-dist"
+            }
+          ],
+          "store_path": "/nix/store/b3dbikq3nkhags08lbn70cns3f0igqb4-python3.13-detect-secrets-1.5.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/9vbkspy43k2vicr9x9ynk1xd87q7gvrl-python3.13-detect-secrets-1.5.0",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/1jsyibhdzp1ca4vxbaki5hh7k2kwghc2-python3.13-detect-secrets-1.5.0-dist"
+            }
+          ],
+          "store_path": "/nix/store/9vbkspy43k2vicr9x9ynk1xd87q7gvrl-python3.13-detect-secrets-1.5.0"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/hjypngym0yzw0chg3lix4rgn628359nr-python3.13-detect-secrets-1.5.0",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/avca2mij2mzac3pl0s9nqc98a3rm7abi-python3.13-detect-secrets-1.5.0-dist"
+            }
+          ],
+          "store_path": "/nix/store/hjypngym0yzw0chg3lix4rgn628359nr-python3.13-detect-secrets-1.5.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/11lami2pxf9zi635wf4llxpfdjwk0rmz-python3.13-detect-secrets-1.5.0",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/k00k0882d4sh62sq2dpl5qb4a8sm546j-python3.13-detect-secrets-1.5.0-dist"
+            }
+          ],
+          "store_path": "/nix/store/11lami2pxf9zi635wf4llxpfdjwk0rmz-python3.13-detect-secrets-1.5.0"
+        }
+      }
+    },
     "github-to-sops@latest": {
       "last_modified": "2025-11-23T21:50:36Z",
       "resolved": "github:NixOS/nixpkgs/ee09932cedcef15aaf476f9343d1dea2cb77e261#github-to-sops",

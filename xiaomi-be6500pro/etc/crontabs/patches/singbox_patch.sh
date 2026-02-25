@@ -10,7 +10,7 @@ USE_PROCD=1
 TMPDIR=/tmp/sing-box
 PROG=${TMPDIR}/sing-box
 CONF=/data/sing-box/config.json
-VERSION="1.12.13"
+VERSION="1.12.22"
 IPK_URL="https://github.com/SagerNet/sing-box/releases/download/v${VERSION}/sing-box_${VERSION}_openwrt_aarch64_generic.ipk"
 VER_FILE=${TMPDIR}/version.txt
 

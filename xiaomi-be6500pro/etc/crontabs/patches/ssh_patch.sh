@@ -16,4 +16,6 @@ cp /data/ssh/dropbear_rsa_host_key /etc/dropbear/
 /etc/init.d/dropbear enable
 /etc/init.d/dropbear restart
 
+cp /data/ssh/autorized_keys /etc/dropbear/
+
 echo "ssh enabled" >/tmp/ssh_patch.log

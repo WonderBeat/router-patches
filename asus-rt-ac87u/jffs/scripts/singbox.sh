@@ -18,9 +18,8 @@ trap 'rm -f "$LOCKFILE"' EXIT
 TMPDIR=/tmp/sing-box
 PROG=${TMPDIR}/sing-box
 CONF=/jffs/config/sing-box/config.json
-VERSION="1.12.14"
+VERSION="1.12.22"
 IPK_URL="https://github.com/SagerNet/sing-box/releases/download/v${VERSION}/sing-box_${VERSION}_openwrt_arm_cortex-a9.ipk"
-VER_FILE=${TMPDIR}/version.txt
 
 modprobe tun
 
@@ -84,6 +83,9 @@ for i in $(seq 1 30); do
   fi
   sleep 4
 done
+if ! ip link show tun0 >/dev/null 2>&1 || ! ip link show wg0 >/dev/null 2>&1; then
+  exit 1
+fi
 /jffs/scripts/firewall.sh
 echo "singbox enabled" >/tmp/singbox_patch.log
 
