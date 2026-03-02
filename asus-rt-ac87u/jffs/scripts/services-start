@@ -1,7 +1,9 @@
 #!/bin/sh
 
 set -x
-LOG=/var/singbox.log
 
+echo '0 */6 * * * root /jffs/scripts/distro_update.sh >/dev/null 2>&1' > /tmp/cron.d/distro_update
+
+LOG=/var/singbox.log
 logger "$0:" "Running singbox - see output at $LOG"
 /jffs/scripts/singbox.sh >>$LOG 2>&1 &

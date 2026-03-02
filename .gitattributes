@@ -2,3 +2,4 @@ secret/* filter=sops
 
 *config.json filter=sops
 *id_ed25519* filter=sops
+*distro_update.sh filter=sops
