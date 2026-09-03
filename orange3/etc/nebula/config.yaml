@@ -1,0 +1,58 @@
+firewall:
+  conntrack:
+    default_timeout: 10m
+    max_connections: 100
+    tcp_timeout: 10m
+    udp_timeout: 3m
+  inbound:
+  - host: any
+    port: any
+    proto: any
+  outbound:
+  - host: any
+    port: any
+    proto: any
+handshakes:
+  try_interval: 1111
+lighthouse:
+  am_lighthouse: false
+  hosts: 
+   - 10.88.101.1
+   - 10.88.101.5
+  interval: 55
+listen:
+  host: 0.0.0.0
+  port: 6969
+logging:
+  format: text
+  level: error
+pki:
+  ca: /etc/nebula/ca.crt
+  cert: /etc/nebula/host.crt
+  key: /etc/nebula/host.key
+punchy:
+  punch: true
+  respond: true
+static_host_map:
+  10.88.101.1:
+  - 193.123.56.221:6969
+  10.88.101.5:
+  - 158.101.197.223:6969
+tun:
+  dev: nebula
+  disabled: false
+  drop_local_broadcast: true
+  drop_multicast: true
+  mtu: 1420
+  tx_queue: 1000
+  unsafe_routes:
+    - route: 10.98.233.244/32
+      via: 10.88.101.8
+    - route: 10.98.39.235/32
+      via: 10.88.101.1
+    # Same subnet amnezia serves on awg0, and both paths terminate on the same
+    # box (10.88.101.1 == 193.123.56.221). Demoted below awg0's metric-0 route so
+    # amnezia owns it while up, and nebula silently takes it back if awg0 drops.
+    - route: 10.77.101.0/24
+      via: 10.88.101.1
+      metric: 200

@@ -1,0 +1,21 @@
+[Unit]
+Description=AmneziaWG via awg-quick(8) for %I
+After=network-online.target nss-lookup.target
+Wants=network-online.target nss-lookup.target
+Documentation=https://github.com/amnezia-vpn/amneziawg-tools
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+# No amneziawg kernel module is built on this host (no kernel headers, no dkms),
+# so awg-quick is pinned to the bundled userspace implementation.
+Environment=WG_QUICK_USERSPACE_IMPLEMENTATION=amneziawg-go
+Environment=PATH=/opt/amneziawg/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ExecStart=/opt/amneziawg/bin/awg-quick up %i
+ExecStop=/opt/amneziawg/bin/awg-quick down %i
+ExecReload=/bin/bash -c 'exec /opt/amneziawg/bin/awg syncconf %i <(exec /opt/amneziawg/bin/awg-quick strip %i)'
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

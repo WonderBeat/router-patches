@@ -1,0 +1,44 @@
+# SOPS age identity — must never leave this machine
+.key
+.sops-recipients
+
+# JSONC sing-box configs: contain passwords/private keys but sops cannot parse
+# (// comments). Keep on disk for sync.sh; version control starts once they are
+# valid JSON. Tracked secret carriers are the encrypted tarballs.
+asus-rt-ac87u/jffs/config/sing-box/config-template.json
+asus-rt-ac87u/jffs/config/sing-box/config-template.wg-oracle.json
+xiaomi-be6500pro/data/sing-box/config-template.json
+orange3/etc/sing-box/config.json
+orange3/etc/sing-box/config.amnezia-fallback.json
+
+# apk extraction debris from usr/bin/tcpdump (public signing key + package metadata)
+.PKGINFO
+.SIGN.*.rsa.pub
+
+# LLM build/test scaffolding from the tcpdump cross-build session (regenerable)
+build-on-router.sh
+build-old-musl.sh
+qemu-build.sh
+test-on-router.sh
+Dockerfile
+.github/
+
+# local tooling / scratch
+.devbox/
+.jcode/
+.jcode-tests/
+\$JCODE_SCRATCH_DIR/
+.pi/
+.age-build/
+.superset/
+# root-level scratch: unreferenced by any box tree, never shipped by sync.sh
+/usr/bin/tcpdump
+/etherwake
+/update-durev-vless.sh
+/proxy-user.sh
+# redundant with init.sh, which wires the filter straight to sops
+/.git-sops.sh
+
+# session notes, local only
+/AGENTS.md
+

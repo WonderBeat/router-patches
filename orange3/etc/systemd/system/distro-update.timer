@@ -1,0 +1,11 @@
+[Unit]
+Description=Check for router-patches updates every 2 hours
+
+[Timer]
+OnBootSec=10min
+OnUnitActiveSec=2h
+# Catch up on a check missed while the box was powered off.
+Persistent=true
+
+[Install]
+WantedBy=timers.target

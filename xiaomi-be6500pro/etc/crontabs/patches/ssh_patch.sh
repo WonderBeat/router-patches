@@ -16,6 +16,10 @@ cp /data/ssh/dropbear_rsa_host_key /etc/dropbear/
 /etc/init.d/dropbear enable
 /etc/init.d/dropbear restart
 
-cp /data/ssh/autorized_keys /etc/dropbear/
+# Was /data/ssh/autorized_keys: the misspelling made this a silent no-op, so no
+# authorized_keys was ever installed and key auth depended on whatever happened
+# to already be in ramfs. /etc is ramfs, so this must run on every boot.
+cp /data/ssh/authorized_keys /etc/dropbear/authorized_keys
+chmod 600 /etc/dropbear/authorized_keys
 
 echo "ssh enabled" >/tmp/ssh_patch.log

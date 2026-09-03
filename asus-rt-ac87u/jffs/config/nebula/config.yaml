@@ -1,0 +1,57 @@
+firewall:
+  conntrack:
+    default_timeout: 10m
+    max_connections: 30
+    tcp_timeout: 10m
+    udp_timeout: 3m
+  inbound:
+    - host: any
+      port: any
+      proto: any
+    - host: any
+      port: any
+      proto: any
+      local_cidr: 192.168.11.0/24
+  outbound:
+    - host: any
+      port: any
+      proto: any
+handshakes:
+  try_interval: 111
+lighthouse:
+  am_lighthouse: false
+  hosts:
+    - 10.88.101.1
+    - 10.88.101.5
+  interval: 100
+listen:
+  host: 0.0.0.0
+  read_buffer: 4194304
+  write_buffer: 4194304
+  routines: 3
+logging:
+  format: text
+  level: error
+pki:
+  ca: /jffs/config/nebula/ca.crt
+  cert: /jffs/config/nebula/asus-router.crt
+  key: /jffs/config/nebula/asus-router.key
+punchy:
+  punch: true
+  respond: true
+static_host_map:
+  10.88.101.1:
+    - 193.123.56.221:6969
+    - 193.123.56.221:6000
+    - 193.123.56.221:8080
+  10.88.101.5:
+    - 158.101.197.223:6969
+    - 158.101.197.223:6000
+    - 158.101.197.223:8080
+tun:
+  dev: nebula
+  disabled: false
+  drop_local_broadcast: true
+  drop_multicast: true
+  mtu: 1420
+  tx_queue: 1100

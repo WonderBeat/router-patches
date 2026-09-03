@@ -1,92 +1,22 @@
-#!/bin/sh
-
-set -e
-
-[ -e "/tmp/singbox.lock" ] && exit 0
-
-# Prevent concurrent execution
-LOCKFILE="/tmp/sing-concurrent.lock"
-
-if [ -f "$LOCKFILE" ]; then
-  echo "Script is already running. If this is an error, remove $LOCKFILE"
-  exit 1
-fi
-
-touch "$LOCKFILE"
-trap 'rm -f "$LOCKFILE"' EXIT
-
-TMPDIR=/tmp/sing-box
-PROG=${TMPDIR}/sing-box
-CONF=/jffs/config/sing-box/config.json
-VERSION="1.12.22"
-IPK_URL="https://github.com/SagerNet/sing-box/releases/download/v${VERSION}/sing-box_${VERSION}_openwrt_arm_cortex-a9.ipk"
-
-modprobe tun
-
-curl -L https://curl.se/ca/cacert.pem -o /tmp/cacert.pem
-
-export SSL_CERT_FILE=/tmp/cacert.pem
-
-wait_for_tmp() {
-  while [ ! -d /tmp ]; do
-    sleep 1
-  done
-  mkdir -p "$TMPDIR"
+{
+	"data": "ENC[AES256_GCM,data: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,iv:JRMH9Y/2Iiv1qDbm/+5byYd7NDb4mPoUM2ouPA0sYlc=,tag:45ULhlzCD78bossqqWdShQ==,type:str]",
+	"sops": {
+		"age": [
+			{
+				"recipient": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKg7/kBmHlOYb4UHYGqcY/yYHR02x3dridkBa6pc/flR",
+				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNzaC1lZDI1NTE5IGs5S0N1ZyBpc29y\nSDNPUkRES3hrZWY5dW1aTGh0V0pmN1lRbVZaUUtjakg5STB3SXdnCmVPZlpqM3Ar\nbGtUbngwM3NvNE10dFdxdjZ3T0pyc01XUHlIcTgvam1wTkEKLS0tIDR3ajNncGcv\nRGVuTTVjekxxN005dlBRQlNabUNHbmFpZkFjcktEL2hOL1kKUcvjmt+HEgywafwS\n+4I1n+5r0vo5NFZdBPTJ0QOBlkp2zeQdVTT0nLy5AjYO2axD1ra8VBypfV3MPD8x\n2VTcqA==\n-----END AGE ENCRYPTED FILE-----\n"
+			},
+			{
+				"recipient": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFOf+OD/2a3/uj/QKcWHILt6gzQUjtnSVwubNPPMcXEW",
+				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNzaC1lZDI1NTE5IGVSQmMzZyArZXdo\nZ1R0aS9paHoxeSt3YWdjano5K0k0TUt1S3ZVTVJMMXkxM3NlSWhJCllwYS9Td3Uw\nZkpXd2RUWEVCV2pUNW40RXVsOHN1bzN3bHVEUzdJdXUrT3cKLS0tIDB6cCtuUmhx\ndGFLOUc3V0YyaTk4YlcrZWhUZ0NWOUNDeFgwd21EYjgxcVkKq9hCBX2hbRijJJDs\n6LBBGcVhvqhc5AmTnXCGBVEHHDYeA6xAPrrPPa/maqpJI65ANh6XnwkdyZNdFIzg\nVg79Xw==\n-----END AGE ENCRYPTED FILE-----\n"
+			},
+			{
+				"recipient": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJE7AlB4XNgssbrBxRcrUUdWbRsVdCiblz3XTXu1s9iC",
+				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNzaC1lZDI1NTE5IC9iSnFvQSBWVmU5\naGJ0a1ZTMlU4S0pCV0xGbXhpT0xURWpaQTBGZ3RSRnpURkdVVzA4CitXYm5CVFQ2\nOENFNHE0TVp5Zy9rclBwVHFwbDNKSk8yQXBwR2ptanJxSVUKLS0tIFlobHJLNmNl\nekt0eXlEZ1NjaDdObVBtcjNaTDQ0UDRidG9kaVE4RTVTUjAKIoS7WrbKPdF7d9Le\njfEJjw1KW8VHhrPOwu6CmRpm0vp7MYFwu+2XY73VUdVFF4/NA+5Z35tASi9tcXao\nsUzRyw==\n-----END AGE ENCRYPTED FILE-----\n"
+			}
+		],
+		"lastmodified": "2026-09-03T12:08:54Z",
+		"mac": "ENC[AES256_GCM,data:tya0Ejop0bsD1efvtaFmiP1eZixto0E0pXq88/xsp/UJB4d9xyZ2zR8uP+NVDZWZA/T/PsTB1KkTJ2BrDrsl1rAX9X1hEIEdtWr4ey1amGD2zcnLaoVQ75Sb3pK0AIXiiNfTtA9+JRWpt/2yCsbdJkctyHNig2JNAGFDSPZPMtw=,iv:xtdcS8pavxFWv0/usBCkH3Cg+HAHPLBZiZh8IbQaKQM=,tag:bFpl6zh5fFBzaxAVFd0FtQ==,type:str]",
+		"version": "3.11.0"
+	}
 }
-
-download_binary() {
-  mkdir -p "$TMPDIR"
-  local_version=""
-  [ -x "$PROG" ] && local_version=$("$PROG" version 2>/dev/null | head -n1 | awk '{print $NF}')
-
-  if [ ! -x "$PROG" ]; then
-    echo "[sing-box] Binary not found, downloading ${VERSION}..."
-  else
-    echo "[sing-box] sing-box v${local_version:-unknown} (up to date)"
-    return 0
-  fi
-  IPK_FILE=/tmp/install.ipk
-
-  curl -L -o "$IPK_FILE" "$IPK_URL" || return 1
-  mkdir -p /tmp/sing-box-extract
-
-  tar -xzf $IPK_FILE -C /tmp/sing-box-extract
-  tar -xzf /tmp/sing-box-extract/data.tar.gz -C /tmp/sing-box-extract/
-  mv /tmp/sing-box-extract/usr/bin/sing-box $PROG
-  rm $IPK_FILE
-  rm -rf /tmp/sing-box-extract
-
-  chmod +x "$PROG"
-  echo "[sing-box] Installed sing-box"
-}
-
-start_service() {
-  wait_for_tmp
-  download_binary || {
-    echo "[sing-box] Failed to download binary!"
-    return 1
-  }
-
-  ${PROG} run -c ${CONF} -D ${TMPDIR} &
-
-  ver=$("$PROG" version 2>/dev/null | head -n1 | awk '{print $NF}')
-  echo "[sing-box] Started (v${ver:-unknown})"
-}
-
-start_service
-
-sleep 4
-for i in $(seq 1 30); do
-  if ip link show tun0 >/dev/null 2>&1 && ip link show wg0 >/dev/null 2>&1; then
-    echo "Interfaces tun0 and wg0 are available"
-    break
-  fi
-  sleep 4
-done
-if ! ip link show tun0 >/dev/null 2>&1 || ! ip link show wg0 >/dev/null 2>&1; then
-  exit 1
-fi
-/jffs/scripts/firewall.sh
-echo "singbox enabled" >/tmp/singbox_patch.log
-
-touch /tmp/singbox.lock

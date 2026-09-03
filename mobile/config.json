@@ -1,0 +1,245 @@
+{
+	"log": {
+		"level": "error",
+		"timestamp": true
+	},
+	"inbounds": [
+		{
+			"type": "tun",
+			"tag": "tun",
+			"interface_name": "tun0",
+			"address": [
+				"173.19.0.1/30"
+			],
+			"auto_route": true,
+			"stack": "system",
+			"strict_route": true,
+			"sniff": true
+		}
+	],
+	"outbounds": [
+		{
+			"type": "direct",
+			"tag": "direct-out"
+		},
+		{
+			"type": "ssh",
+			"tag": "ssh-oracle",
+			"server": "ENC[AES256_GCM,data:9Q8ASLGVMXa/JQ9lpkAU,iv:rPQHbd0/tmDnLZ2iReIJkA3sb0llgIU+DFcNyEsmWCM=,tag:+FZO7CvUh4Q23E9UObZgUQ==,type:str]",
+			"server_port": 22,
+			"user": "ENC[AES256_GCM,data:tDU3RAjLR5Qj,iv:v62qG2k5VqHIDmubzsZW18fJYRwyjJojbnGK0bgCJOA=,tag:scTNnB4QysWM9IlE7B1XZA==,type:str]",
+			"private_key": "ENC[AES256_GCM,data:BgpBJxMHhKsquQY69+++9umy8rILceM6eGWNFQKGHibuLHk/LE8j6SAfXr3mHbiD20fhmuNUN98A9d9Xwi6fYRNvci++K+6BoWxWCuhl4sc3FBpynifmZYrcvLlva0Sv5dUjwKR7r5fI/SFO3Ivp956EquIhQqKnfjDD2jY2ZwXAw5W3VO05TmRaUKlsdKNjGtXKvxPejSqDLytZcFaRfxPubIZqjLGHm3o1ya+htLK1YRLZH9ivhBVtw574qT4iTflplO3pXh7JGV8l4hkvU3/WGQBJwNdmZerRh00VlknIyqTx8TZvV5BO2ueNMrUo7wQKuHhxn221J1USRrV8eq/6h2sR+SfgShnEj/ehM4Bbz7IW9Pyoe+7/zVe4iRaOmUJdfWbYLLX0ZH8GCiZ9QcF1u9+6XQJktlAJWYaP4wI5LYNYfGjKm1B0kqmdp3iVANZvRLlnPfl6mBkYWgyi7oJpWszZNkFtMPg2775TRs2c+l9b/v9D0JuExfKdwumMFSDuLagIyZrr4MI4V54/LTBiZFKyROWpl1Y=,iv:OJNhWxknAQbINEyhcrbkPKhuVTGbNqrVqlRA4hn7n3Y=,tag:R6o+cMF5xMYg7zU5ceu4Fg==,type:str]",
+			"connect_timeout": "5s",
+			"tcp_fast_open": false
+		},
+		{
+			"type": "ssh",
+			"tag": "ssh-kesa",
+			"server": "ENC[AES256_GCM,data:7VixUi2FH7sA/l0AZjmQ2VP5rg==,iv:Y6NMuSBeW7wx0ByDy5oRjm9K13nzwDfFsfBFK3wl1yQ=,tag:4MjWZNUbuz0rxMWly6r80Q==,type:str]",
+			"server_port": 22,
+			"user": "ENC[AES256_GCM,data:10A2Mu+rUl6+,iv:gXP8unHsi+z0Kg/fYFvrz7i/Ytg9FjPyHPD4EJpqKYw=,tag:QlftcAW1LWkUndXsPcS6ng==,type:str]",
+			"private_key": "ENC[AES256_GCM,data:XjM2jyzfzwZ+NGXu3bNwlOpsj/eiA2nUe6XgqAgxR3xEL9pMARCrsWLDYJHKzqfzHd5EaRl/GCDu9oOealM2HWtZVXYEvedxYIU8sdH/WSJqnZUBMUx3f1S60YJCcU7Iwbi1sTi1uafZcWTQ9YJfr1Dx5frBawBN408PKemUr+1eWFrI7z1mx1qkaByz/G3+MyaLGCHuHmVAkkGwJhWWprv82TH5aAgtdyZvPQcWzZ5jPy24i1u6N+1MiNVXBpox3/L1loCSn/qz3OOGcd6aV0mb5NiBiDq9O3LRWeQC/mrx9MEJOKV9FIeEWENii/uNqshvCP9LseRdjNYvnegwySpRa82FpwRodiCLCZGULGeg8mo+DzvPfrmtJHMJM9aj+Iw8ysV5y1D3fKRHg3KCJeNzsgJFrUjtarpqBDkGEtnpjf7utJVQob+EEbVD+05NdkqJjeUG5V2B/ZCa4Dejn+Ces/X7BRXH6PUxIYsMBeISLVZksZiNc8dleaRP/dl9iEardjWdEqaTjss/sTMzgLSbdgykPxQhzjs=,iv:SgtjWtU8qcJuATFVhEBOK0sJsG+Oc5h5JUt/HzPIT/U=,tag:fUDvF3QbbwjFkvelxrX0dg==,type:str]",
+			"connect_timeout": "5s",
+			"tcp_fast_open": true
+		},
+		{
+			"type": "ssh",
+			"tag": "ssh-o1",
+			"server": "ENC[AES256_GCM,data:DHgckJeFhmCQO3kUvEY=,iv:saDZvuHspNwk+iD+CRknJSLILuZNnsqjs3l5/6bNidA=,tag:jZoKtOczQvq6Q+svx+yq+Q==,type:str]",
+			"server_port": 22,
+			"user": "ENC[AES256_GCM,data:lj3eTvtc7bIu,iv:A33SKelic6e5X2h6qz3C7tP2S661F8BHqmcItmguBt4=,tag:WdOVdwin3iE4I5CIUy8Jlg==,type:str]",
+			"private_key": "ENC[AES256_GCM,data:IZapzbW2v4dGAk761CO6HCVeitKFyget4bjnEBpuOweAl2ajt9F1D4H021bFI/aIODQFz7BNAc5F24PvlVWrYaHdh6YWpdHVQbNe60WCPjM9UeytvCAukSxSfIFYsmXXEcoGaCkLrrucFIHoTqTPmgXkOBL0tEMdEBucaRYIhDk8AgCR6WIBzRFePA4tzD70wgXGzgVm6xKZwXOBQZf1bAQeBPKu4YURxkS9X8trBXJYjhdmxauUnvecGylLhwqIT5PlcbmFr6+7koGjnmUIZIaWhTLHOvY8h7k0vccuDX83GqEJQJ/gi/XtOO6R/tF3fdV7kyQ8+yzzobFCJASX6YfYTwHdmFpr55Ld0GkL203ITCeQwdSN+LUt0qK1SMoi4OF+WtqcilIex3NMhlTEY8GWcoSKCJjrs/y5u5togpBEs3Ril7irmxcxXjSOOI5sou8hAG8XnawNF9Lq2GEJJrK5oDzBXyrEo27w8XnbxrbcS2A82OEfx46//AsSDFM+6Ditp1wbY+ikIO6bWdwKINDq8GadQ8FDey8=,iv:KsjcAuviqhVHbD7V65wZhziPI2NMnPwIvUPvE4NMyV0=,tag:0fP0wnRuhuU6mFzlgfsMXA==,type:str]",
+			"connect_timeout": "5s",
+			"tcp_fast_open": true
+		},
+		{
+			"type": "urltest",
+			"tag": "vpn-out",
+			"outbounds": [
+				"trojan-nagi",
+				"trojan-nagi-31443",
+				"shadow",
+				"ssh-oracle",
+				"ssh-kesa",
+				"ssh-o1"
+			],
+			"url": "https://www.youtube.com",
+			"interval": "3m",
+			"interrupt_exist_connections": true
+		},
+		{
+			"type": "trojan",
+			"tag": "trojan-nagi",
+			"server": "ENC[AES256_GCM,data:PCnwT5Jjjvv1mGlHEmNmUfmSl52LE2gn8aPSgDNJ9UxJyIM2Dli8UUiF,iv:/vJTW6ZbjRYc/azrOhxFGgoMte/rn6Zgj/zM7SljDWM=,tag:VGflIqozmKoxaeL92R6Xeg==,type:str]",
+			"server_port": 443,
+			"password": "ENC[AES256_GCM,data:WR5Uc6ItKsfh3g==,iv:DTylKT7hXW8r4pYVTHnVlAWALmO4wZaWe1NKTNVjVPM=,tag:6d5jJ0q0Q/mIWQMAHJ5VMQ==,type:str]",
+			"connect_timeout": "5s",
+			"tls": {
+				"enabled": true,
+				"server_name": "yahoo.com",
+				"utls": {
+					"enabled": true,
+					"fingerprint": "chrome"
+				},
+				"reality": {
+					"enabled": true,
+					"public_key": "JrZwXrc4sX_-iL3gvppyvh6517P_eb0CIglB35-6i30",
+					"short_id": "801852ed"
+				}
+			},
+			"multiplex": {
+				"enabled": false
+			},
+			"tcp_fast_open": true
+		},
+		{
+			"type": "shadowsocks",
+			"server": "ENC[AES256_GCM,data:gPej7cXDrruCR2gCwfXQqqtHBw==,iv:kmJaHNb7ypxE4I31Arg+Wzg++Iiapqy3ony5g9p9DBE=,tag:MZxCMAWk/ENJt5VyzS/vqA==,type:str]",
+			"network": "tcp",
+			"tag": "shadow",
+			"server_port": 31444,
+			"method": "2022-blake3-chacha20-poly1305",
+			"password": "ENC[AES256_GCM,data:HaGpxVut3icB8ClDhiy0r12sGjVyXWRQMac5t+GKT0FEf4+xFQaZjX26krw=,iv:TnbkBqLA5+GORHWB4ehpuRHcR6BmT5MWbaDzHQDMOd0=,tag:OzSNRr2GgzGLBeVCUwo1Mg==,type:str]",
+			"multiplex": {
+				"enabled": false
+			}
+		},
+		{
+			"type": "trojan",
+			"tag": "trojan-nagi-31443",
+			"server": "ENC[AES256_GCM,data:RNRYsCsbNpV7amVYtMkgEHQEc9jaT7JGHQ7yglQmJhrx543a7Ipm0CE2,iv:hcEOApY8j0/zK3G1L2sloR67aKaamzkHCyP/bgoq+hc=,tag:7m3TDfUZAnte5/vXQGAj0g==,type:str]",
+			"server_port": 31443,
+			"password": "ENC[AES256_GCM,data:M1oo5iHUNdO/hA==,iv:OSykUu7rLwiRdrju6cczjoB/s2mBrx4Zbj6zPoUkOmE=,tag:QNGwROILi9cdNiczQ/ZYEQ==,type:str]",
+			"tls": {
+				"enabled": true,
+				"server_name": "yahoo.com",
+				"utls": {
+					"enabled": true,
+					"fingerprint": "chrome"
+				},
+				"reality": {
+					"enabled": true,
+					"public_key": "JrZwXrc4sX_-iL3gvppyvh6517P_eb0CIglB35-6i30",
+					"short_id": "801852ed"
+				}
+			},
+			"multiplex": {
+				"enabled": false
+			},
+			"connect_timeout": "10s"
+		}
+	],
+	"route": {
+		"final": "direct-out",
+		"rules": [
+			{
+				"rule_set": "discord-voice-ip-list",
+				"outbound": "vpn-out"
+			},
+			{
+				"rule_set": "ru-bundle",
+				"outbound": "vpn-out"
+			},
+			{
+				"domain_suffix": "sidestore.io",
+				"outbound": "vpn-out"
+			},
+			{
+				"domain_suffix": ".ai",
+				"outbound": "vpn-out"
+			},
+			{
+				"domain_suffix": ".youtube.com",
+				"outbound": "vpn-out"
+			},
+			{
+				"domain_suffix": ".googlevideo.com",
+				"outbound": "vpn-out"
+			},
+			{
+				"domain_suffix": ".nhacmp3youtube.com",
+				"outbound": "vpn-out"
+			},
+			{
+				"domain_suffix": ".1e100.net",
+				"outbound": "vpn-out"
+			},
+			{
+				"domain_suffix": ".ytimg.com",
+				"outbound": "vpn-out"
+			},
+			{
+				"domain_suffix": ".youtu.be",
+				"outbound": "vpn-out"
+			},
+			{
+				"domain_suffix": ".google.com",
+				"outbound": "vpn-out"
+			},
+			{
+				"domain_suffix": ".gvt1.com",
+				"outbound": "vpn-out"
+			},
+			{
+				"domain_suffix": ".googleusercontent.com",
+				"outbound": "vpn-out"
+			},
+			{
+				"domain_suffix": ".googleapis.com",
+				"outbound": "vpn-out"
+			},
+			{
+				"domain_suffix": ".gstatic.com",
+				"outbound": "vpn-out"
+			},
+			{
+				"ip_is_private": true,
+				"port": 53,
+				"action": "hijack-dns"
+			}
+		],
+		"rule_set": [
+			{
+				"type": "remote",
+				"tag": "antizapret",
+				"format": "binary",
+				"url": "https://github.com/savely-krasovsky/antizapret-sing-box/releases/latest/download/antizapret.srs",
+				"download_detour": "direct-out"
+			},
+			{
+				"type": "remote",
+				"tag": "ru-bundle",
+				"format": "binary",
+				"url": "https://github.com/legiz-ru/sb-rule-sets/raw/main/ru-bundle.srs"
+			},
+			{
+				"type": "remote",
+				"tag": "discord-voice-ip-list",
+				"format": "binary",
+				"url": "https://github.com/legiz-ru/sb-rule-sets/raw/main/discord-voice-ip-list.srs"
+			}
+		],
+		"auto_detect_interface": true,
+		"override_android_vpn": true
+	},
+	"sops": {
+		"age": [
+			{
+				"recipient": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKg7/kBmHlOYb4UHYGqcY/yYHR02x3dridkBa6pc/flR",
+				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNzaC1lZDI1NTE5IGs5S0N1ZyBzRHgz\nYWkwUXJ4Q0drL3lzZWdmeHRvOVRWRkw4NHNwanV1ZzhrSG1xa3lvCnlkZ2hzb3NJ\ncmh2VzA3Tk5QSnJwWHBkeWtTL3JUQUtyRFdhbjRQL3Ruck0KLS0tIG56bm5EcGVC\nN1VxR05lZHQyUHNUK1RnaDF0RndoY0VqQVdTM244akVIcEkKYvcjfqzj/MvLwOFq\nSaFDbZUFxf+KfhV2u/a9ei3k5EZ8OpFD3PwYW48wQ6NEP6qykzBP6wR594GYMAGr\noNdCMA==\n-----END AGE ENCRYPTED FILE-----\n"
+			},
+			{
+				"recipient": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFOf+OD/2a3/uj/QKcWHILt6gzQUjtnSVwubNPPMcXEW",
+				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNzaC1lZDI1NTE5IGVSQmMzZyB2eGZW\nWkZHY2hJQ3hZMUlmWlhnWDhiZ3VEazRmYjRkWlVmYXpVYktQQmcwCkVibUlZcjI4\nL3FRMVdRM1JyWjMrdEs0UFltVVpMSDlibkVIZTk3aGhwVVEKLS0tIC9DR3ozTThi\nZkJzdlpPMGh5TjlJR0xJbXl2cDA0ekxaTEM1TUo4TXk1T00Kz739lJZwMvE3kSMG\nmVVxWObk1pi8hEGwH5GAJF/MrXVBrgKP/gsZxW+czP3eSgSZvJ3Bqx1DuwxD50x2\nHt07UA==\n-----END AGE ENCRYPTED FILE-----\n"
+			},
+			{
+				"recipient": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJE7AlB4XNgssbrBxRcrUUdWbRsVdCiblz3XTXu1s9iC",
+				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNzaC1lZDI1NTE5IC9iSnFvQSBrMXNa\nckw1cTZjaEhhNExSWjNZUGY4OHc3OXV6cnE1M2JPcEJzS3R2b3pZCll5U25ZQ0J4\nZFRrZCtwaXZERWFpaVY2YWRnWFQ3bDlLN0xOd2tjckhYQXcKLS0tIEE1dW4rZHFE\nM2NhQlRHNjFOeFJKUGk3dUhub3A0b0tiUmNGMW9YNkw0dUUKSLgFEnFVHdmNAS4y\ng7a1u8lIQefYsU0vM+DuqP6+oE3vE+H6wCU06jcQ3YAkPElftO9UNr3ku9fQoE7L\n+NB+vg==\n-----END AGE ENCRYPTED FILE-----\n"
+			}
+		],
+		"lastmodified": "2026-09-03T12:08:54Z",
+		"mac": "ENC[AES256_GCM,data:2Bggf3fzE1u3D1kCZf15wfoRHj2KMBt7GgY+rs08cX5YplTKkpE96PkIPwr8tZCCqtrPeDBc1qmrBBaYr05zW88+5K0I6z80d54wqqcW9rTr1VEpXjgYL9JosbAtOHADrdsQX4bsAx66DCLhQ1EA6CoUfqJ6lRYjlC1rTPWi6p8=,iv:o2F30R7CCj53vhhao/fipVJtJahPFiwdc+0QYaC8EI8=,tag:NpCPF5LPiuYD0j0jrEX+Tw==,type:str]",
+		"encrypted_regex": "^(DISTRO_URL|private_key|pre_shared_key|server|key|pass.*|secret|addr|api_path|user|password|token_id|token_secret|realm|insecure|ssh_user|ssh_key)$",
+		"version": "3.11.0"
+	}
+}

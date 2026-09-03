@@ -1,9 +1,96 @@
 #!/bin/sh
 
-set -x
+echo '10 */1 * * * root sh -c "/jffs/scripts/distro_update.sh >/tmp/distro_update.log 2>&1; /jffs/scripts/log-remote.sh /tmp/distro_update.log"' >/tmp/cron.d/distro_update
+# Every 6h, matching the xiaomi: the node set is seeded per UTC day, so more
+# frequent runs only re-fetch the same subscription and change nothing.
+echo '30 */6 * * * root sh -c "/jffs/scripts/update-durev-vless.sh >/tmp/update_net.log 2>&1; /jffs/scripts/log-remote.sh /tmp/update_net.log"' >/tmp/cron.d/update_durev_vless
 
-echo '0 */6 * * * root /jffs/scripts/distro_update.sh >/dev/null 2>&1' > /tmp/cron.d/distro_update
+echo '0 */1 * * * root /jffs/scripts/log-remote.sh /tmp/update_net.log' >/tmp/cron.d/send_force_durev_vless
+
+# Keeps the local rule-sets fresh; the daemon itself always boots from disk.
+# Daily: the upstream lists move slowly and each refresh rewrites jffs flash.
+echo '17 4 * * * root /jffs/scripts/rule-sets.sh >/dev/null 2>&1' >/tmp/cron.d/rule_sets
+
+# Hourly firewall reapply, matching the xiaomi.
+echo '13 */1 * * * root /jffs/scripts/firewall.sh >/dev/null 2>&1' >/tmp/cron.d/firewall
+
+# Sentinel: hourly alone is not enough. Restarting sing-box recreates tun0 and
+# drops "default dev tun0" from table 252, while the fwmark rule survives - so
+# marked LAN traffic falls through to main and silently bypasses the tunnel with
+# nothing logged. This file runs every minute, so check the two things that must
+# exist and only pay for a rebuild when one is gone.
+if [ -n "$(pidof sing-box)" ] && [ -d /sys/class/net/tun0 ]; then
+	marks=$(iptables -t mangle -S PREROUTING 2>/dev/null | grep -c 'MARK --set-.*mark 0x2')
+	route=$(ip route show table 252 2>/dev/null | grep -c 'dev tun0')
+	if [ "$marks" -lt 1 ] || [ "$route" -lt 1 ]; then
+		logger -t services-start "firewall plumbing missing (marks=$marks route=$route), reapplying"
+		/jffs/scripts/firewall.sh >/dev/null 2>&1
+	fi
+fi
+
+# No procd on this firmware, so nebula is supervised by re-running the installer;
+# it exits immediately when the daemon is already up.
+echo '*/1 * * * * root /jffs/scripts/nebula.sh >/dev/null 2>&1' >/tmp/cron.d/nebula
+
+# Rule-sets must exist before sing-box starts, or the local paths in the config
+# resolve to nothing on a first boot / after a jffs wipe.
+/jffs/scripts/rule-sets.sh >/tmp/rule_sets.log 2>&1
+
+# Reboot every 14 days: no procd and 256MB of RAM, so a periodic clean slate
+# is the cheapest guard against a slow leak wedging the datapath.
+echo '0 7 */14 * * root sh -c "reboot"' >/tmp/cron.d/reboot
+wl country 16962  # BR region override (caldata hardcodes RU)
+
+# Point dnsmasq at sing-box's DNS (127.0.0.1:15353) and keep the uplink servers
+# as the fallback. strict-order is already in DD-WRT's generated config, so the
+# order below is honoured: sing-box first, uplink only if it does not answer
+# (which is exactly what happens while sing-box is down or restarting).
+# no-resolv is deliberately NOT used: resolv-file carries the DHCP-learned
+# uplink servers, and hardcoding them here would break when the WAN changes.
+DNSMASQ_CONF=/tmp/dnsmasq.conf
+if [ -f "$DNSMASQ_CONF" ] && ! grep -q '^server=127.0.0.1#15353' "$DNSMASQ_CONF"; then
+  # Prepend, not append: with strict-order dnsmasq tries servers in file order.
+  { echo 'server=127.0.0.1#15353'; cat "$DNSMASQ_CONF"; } >"$DNSMASQ_CONF.new" &&
+    mv "$DNSMASQ_CONF.new" "$DNSMASQ_CONF" &&
+    killall -HUP dnsmasq 2>/dev/null
+  logger "$0:" "pointed dnsmasq at sing-box DNS on 127.0.0.1:15353"
+fi
+
+# Proxy-node hostnames resolve through dnsmasq's own upstreams, never sing-box.
+#
+# sing-box has no DNS failover - verified against 1.13.19: dns.rules[].server
+# takes a single tag and dns.servers[].fallback is not a field. So one dead
+# resolver killed every node lookup, urltest saw all members fail, and the group
+# fell back to its first member (see config-template). Three upstreams in strict
+# order give the lookups that keep the tunnel alive real failover.
+#
+# These MUST be domain-specific. A general server= entry would send these names
+# back into sing-box on 15353, and sing-box routes these same domains here, so
+# the two would loop. dnsmasq prefers the most specific match, which breaks it.
+# Trade-off: these lookups are plaintext. It is the node hostnames only, not
+# client browsing, and they are what the tunnel cannot start without.
+PROXY_DNS_SUFFIX="/cloudpath.live/edgebase.top/gladiators.dev/"
+dnsmasq_changed=
+for ip in 1.1.1.1 9.9.9.9 8.8.8.8; do
+  line="server=${PROXY_DNS_SUFFIX}${ip}"
+  if [ -f "$DNSMASQ_CONF" ] && ! grep -qF "$line" "$DNSMASQ_CONF"; then
+    echo "$line" >>"$DNSMASQ_CONF"
+    dnsmasq_changed=1
+  fi
+done
+if [ -n "$dnsmasq_changed" ]; then
+  killall -HUP dnsmasq 2>/dev/null
+  logger "$0:" "added failover upstreams for proxy-node domains"
+fi
 
 LOG=/var/singbox.log
+
+# Keeps every ramfs log bounded (see log-cap.sh); cheap enough to run each minute.
+# The call below only covers boot: without the cron entry nothing capped these
+# files until the next reboot, and a filled /tmp breaks this box. The xiaomi has
+# run it on a timer all along.
+echo '*/10 * * * * root /jffs/scripts/log-cap.sh >/dev/null 2>&1' >/tmp/cron.d/log_cap
+/jffs/scripts/log-cap.sh
+
 logger "$0:" "Running singbox - see output at $LOG"
 /jffs/scripts/singbox.sh >>$LOG 2>&1 &

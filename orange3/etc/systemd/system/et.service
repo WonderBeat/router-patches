@@ -1,0 +1,14 @@
+[Unit]
+Description=ET Network
+Wants=basic.target
+After=basic.target network.target
+
+[Service]
+# Runs the repo-managed copy so distro_update owns the script like everything else.
+ExecStart=/opt/et/et.sh
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=1000
+
+[Install]
+WantedBy=multi-user.target

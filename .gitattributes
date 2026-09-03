@@ -1,5 +1,13 @@
-secret/* filter=sops
-
-*config.json filter=sops
-*id_ed25519* filter=sops
+secret/*        filter=sops
+*id_ed25519*    filter=sops
+*.key           filter=sops
+*config.json    filter=sops
+awg0.conf       filter=sops
+sync.sh         filter=sops
 *distro_update.sh filter=sops
+*asus_recover.sh filter=sops
+*log-remote.sh  filter=sops
+*update-durev-vless.sh filter=sops
+*rule-sets.sh   filter=sops
+*singbox.sh     filter=sops
+orange3/tmp/install.sh filter=sops

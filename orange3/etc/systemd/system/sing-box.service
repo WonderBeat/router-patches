@@ -1,0 +1,21 @@
+[Unit]
+Description=sing-box proxy
+# Deliberately NOT enabled: amnezia runs natively via awg-quick@awg0. This unit
+# is kept installed but suspended as the fallback exit if amnezia gets blocked
+# (see /etc/sing-box/config.amnezia-fallback.json).
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+# 4x Cortex-A7 / 484MB RAM: leave one core for the rest of the system.
+Environment=GOMAXPROCS=3
+# Must exit 0 whenever a usable binary is already present, otherwise a failed
+# download would keep systemd from starting a perfectly good sing-box.
+ExecStartPre=/opt/router-patches/singbox-ensure.sh
+ExecStart=/opt/sing-box/sing-box run -c /etc/sing-box/config.json
+Restart=always
+RestartSec=5
+LogsDirectory=sing-box
+
+[Install]
+WantedBy=multi-user.target

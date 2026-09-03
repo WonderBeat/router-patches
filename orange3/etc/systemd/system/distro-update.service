@@ -1,0 +1,8 @@
+[Unit]
+Description=Pull router-patches distro archive and apply it
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/router-patches/distro_update.sh
